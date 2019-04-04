@@ -1,0 +1,3 @@
+[submodule "vendor/pbose-protobuf"]
+	path = vendor/pbose-protobuf
+	url = ../pbose-protobuf.git

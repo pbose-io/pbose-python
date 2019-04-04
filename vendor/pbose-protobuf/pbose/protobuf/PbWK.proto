@@ -1,0 +1,99 @@
+/** @file PbWK.proto
+ * @brief Protobuf Web Key
+ *
+ * @copyright
+ * Copyright 2018 PbOSE <https://pbose.io>
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+syntax = "proto3";
+import "pbose/protobuf/PbWA.proto";
+
+package pbose.protobuf;
+
+/**
+ * Protobuf Web Key (PbWK)
+ * https://tools.ietf.org/html/rfc7517#section-4
+ */
+message PbWK {
+  /* https://tools.ietf.org/html/rfc7517#section-4.1 */
+  PbWKType.Enum kty                     = 1;
+  /* properties specific to each key type */
+  oneof kty_prop {
+    PbWKTypeEC  kty_prop_ec             = 2;
+    PbWKTypeRSA kty_prop_rsa            = 3;
+    PbWKTypeOct kty_prop_oct            = 4;
+  }
+  /* https://tools.ietf.org/html/rfc7517#section-4.2 */
+  PbWKUse.Enum use                      = 5;
+  /* https://tools.ietf.org/html/rfc7517#section-4.3 */
+  repeated PbWKKeyOps.Enum key_ops      = 6;
+  /* https://tools.ietf.org/html/rfc7517#section-4.4 */
+  PbWKAlg.Enum alg                      = 7;
+  /* https://tools.ietf.org/html/rfc7517#section-4.5 */
+  string kid                            = 8;
+  /* https://tools.ietf.org/html/rfc7517#section-4.6 */
+  string x5u                            = 9;
+  /* https://tools.ietf.org/html/rfc7517#section-4.7 */
+  repeated bytes x5c                    = 10;
+  /* https://tools.ietf.org/html/rfc7517#section-4.8 */
+  bytes x5t                             = 11;
+  /* https://tools.ietf.org/html/rfc7517#section-4.9 */
+  bytes x5t_s256                        = 12;   // x5t#S256
+}
+
+/**
+ * Protobuf Web Key Use Registry
+ * https://tools.ietf.org/html/rfc7517#section-8.2
+ */
+message PbWKUse {
+enum Enum {
+  UNKNOWN                               = 0;
+  SIG                                   = 1;    // sig
+  ENC                                   = 2;    // enc
+}
+}
+
+/**
+ * Protobuf Web Key Operations Registry
+ * https://tools.ietf.org/html/rfc7517#section-8.3
+ */
+message PbWKKeyOps {
+enum Enum {
+  UNKNOWN                               = 0;
+  SIGN                                  = 1;    // sign
+  VERIFY                                = 2;    // verify
+  ENCRYPT                               = 3;    // encrypt
+  DECRYPT                               = 4;    // decrypt
+  WRAPKEY                               = 5;    // wrapKey
+  UNWRAPKEY                             = 6;    // unwrapKey
+  DERIVEKEY                             = 7;    // deriveKey
+  DERIVEBITS                            = 8;    // deriveBits
+}
+}
+
+/**
+ * PbWK Set (PbWKSet)
+ * https://tools.ietf.org/html/rfc7517#section-5
+ */
+message PbWKSet {
+  /* https://tools.ietf.org/html/rfc7517#section-5.1 */
+  repeated PbWK keys                    = 1;
+}
